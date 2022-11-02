@@ -132,16 +132,28 @@ public class StringArrayUtils {
      * @return true if each letter in the alphabet has been used in the array
      */ // TODO
     public static boolean isPangramic(String[] array) {
+        String alphabetArray = "abcdefghijklmnopqrstuvwxyz";
+        //String convArr = Arrays.toString(array).replaceAll(" ","").toLowerCase();
+        String convArr = Arrays.toString(array).toLowerCase();
+        for(int i = 0; i < alphabetArray.length(); i++){
+            if(!convArr.contains(String.valueOf(alphabetArray.charAt(i)))){
+                return false;
+            }
+        }
+        return true;
+    }
+        /*
         // Given string str
         String str = String.join(" ", array).replaceAll(" ", "");
         int len = str.length();
+        int man = 'a' - 'b';
 
         // Function Call
         if (allLetter(str, len))
             return true;
         else
             return false;
-    }
+    } */
 
     /**
      * @param array array of String objects
