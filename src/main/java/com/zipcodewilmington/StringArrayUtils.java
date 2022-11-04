@@ -217,24 +217,18 @@ public class StringArrayUtils {
     public static String[] packConsecutiveDuplicates(String[] array) {
         List<String> fix = new ArrayList<>(List.of(array));
 
-        for(int i = 0; i < fix.size(); i++){
-            while(i<fix.size()){
-                if(fix.get(i).contains(fix.get(i+1))){
-                    fix.set(i,fix.get(1) + fix.get(i+1));
-                    fix.remove(i+1);
+        for (int i = 0; i < fix.size() - 1; i++) {
+            while (fix.get(i).contains(fix.get(i + 1))) {
+                fix.set(i, fix.get(i) + fix.get(i + 1));
+                fix.remove(i + 1);
+                if (i == fix.size() - 1) {
+                    break;
                 }
             }
-            if(i == fix.size()- 1){
-                break;
-            }
         }
-        //fix.add(array[array.length - 1]);
         System.out.println(fix);
         String[] last = fix.toArray(new String[0]);
         return last;
-
-        }
-
-
+    }
 
 }
