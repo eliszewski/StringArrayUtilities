@@ -3,6 +3,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.IntStream;
+import java.util.stream.Stream;
 
 /**
  * Created by leon on 1/29/18.
@@ -59,7 +61,6 @@ public class StringArrayUtils {
      * @return an array with identical contents in reverse order
      */ // TODO
     public static String[] reverse(String[] array) {
-        //ArrayList<String> rev = new ArrayList<>();
         String[] rev = new String[array.length];
         int j = 0;
         for (int i = array.length - 1; i >= 0; i--) {
@@ -74,86 +75,25 @@ public class StringArrayUtils {
      * @return true if the order of the array is the same backwards and forwards
      */ // TODO
     public static boolean isPalindromic(String[] array) {
-        if (Arrays.equals(reverse(array), array)) {
-            return true;
-        }
-        return false;
+        return Arrays.equals(reverse(array), array);
     }
-
-
-
-
-    // Function to check if ch is a letter
-
-
-    // Function to check if a string
-    // contains all the letters from
-    // a to z
-    static boolean allLetter(String str,
-                             int len)
-    {
-        // Convert the given string
-        // into lowercase
-        str = str.toLowerCase();
-        int size = 26;
-
-        // Create a frequency array to
-        // mark the present letters
-        boolean[] present = new boolean[size];
-
-        // Traverse for each character
-        // of the string
-        for (int i = 0; i < len; i++) {
-                // Mark current letter as present
-                int letter = str.charAt(i) - 'a';
-                present[letter] = true;
-
-        }
-
-        // Traverse for every letter
-        // from a to z
-        for (int i = 0; i < size; i++) {
-
-            // If the current character
-            // is not present in string
-            // then return false,
-            // otherwise return true
-            if (!present[i])
-                return false;
-        }
-        return true;
-    }
-
-    // Driver Code
-
 
     /**
      * @param array array of String objects
      * @return true if each letter in the alphabet has been used in the array
      */ // TODO
     public static boolean isPangramic(String[] array) {
-        String alphabetArray = "abcdefghijklmnopqrstuvwxyz";
-        //String convArr = Arrays.toString(array).replaceAll(" ","").toLowerCase();
-        String convArr = Arrays.toString(array).toLowerCase();
-        for(int i = 0; i < alphabetArray.length(); i++){
-            if(!convArr.contains(String.valueOf(alphabetArray.charAt(i)))){
+        String alphabet = "abcdefghijklmnopqrstuvwxyz";
+        String combined = String.join("", array).toLowerCase();
+        for (char c : alphabet.toCharArray()) {
+            if (!combined.contains(String.valueOf(c))) {
                 return false;
             }
         }
         return true;
     }
-        /*
-        // Given string str
-        String str = String.join(" ", array).replaceAll(" ", "");
-        int len = str.length();
-        int man = 'a' - 'b';
 
-        // Function Call
-        if (allLetter(str, len))
-            return true;
-        else
-            return false;
-    } */
+
 
     /**
      * @param array array of String objects
@@ -176,17 +116,7 @@ public class StringArrayUtils {
      * @return array with identical contents excluding values of `value`
      */ // TODO
     public static String[] removeValue(String[] array, String valueToRemove) {
-        int toRemove = getNumberOfOccurrences(array, valueToRemove); // find number of occ
-        String[] rem = new String[array.length - toRemove];
-        int count = 0;
-        for (String element : array) {
-            if (!element.equals(valueToRemove)) {
-                rem[count] = element;
-                count++;
-            }
-        }
-        return rem;
-
+        return Arrays.stream(array).filter(e -> !e.equals(valueToRemove)).toArray(String[]::new);
     }
     //
 
@@ -195,20 +125,11 @@ public class StringArrayUtils {
      * @return array of Strings with consecutive duplicates removes
      */ // TODO
     public static String[] removeConsecutiveDuplicates(String[] array) {
-        List<String> fix = new ArrayList<>();
-        for(int i = 0; i < array.length; i++){
-            if( i < array.length - 1 && array[i] != array[i + 1]){
-                fix.add(array[i]);
-            }
-        }
-        //if(!array[array.length - 1].equals(array[array.length - 2])){
-            //fix.add(array[array.length -1]);}
-        fix.add(array[array.length - 1]);
-        System.out.println(fix);
-        String[] last = fix.toArray(new String[0]);
-        return last;
+            return IntStream.range(0, array.length)
+                    .filter(i -> i == 0 || !array[i].equals(array[i - 1]))
+                    .mapToObj(i -> array[i])
+                    .toArray(String[]::new);
     }
-
 
     /**
      * @param array array of chars
@@ -216,7 +137,6 @@ public class StringArrayUtils {
      */ // TODO
     public static String[] packConsecutiveDuplicates(String[] array) {
         List<String> fix = new ArrayList<>(List.of(array));
-
         for (int i = 0; i < fix.size() - 1; i++) {
             while (fix.get(i).contains(fix.get(i + 1))) {
                 fix.set(i, fix.get(i) + fix.get(i + 1));
@@ -226,9 +146,7 @@ public class StringArrayUtils {
                 }
             }
         }
-        System.out.println(fix);
-        String[] last = fix.toArray(new String[0]);
-        return last;
+        return fix.toArray(new String[0]);
     }
 
 }
